@@ -3,15 +3,16 @@ import { onMounted, onUnmounted, ref } from 'vue'
 import { startMockService, stopMockService } from './services/mockService'
 import { useMetricsStore } from './stores/metrics'
 import { useDark, useToggle } from '@vueuse/core'
-import { GridStack } from 'gridstack'
-import 'gridstack/dist/gridstack.min.css'
 import { LMap, LTileLayer, LMarker } from '@vue-leaflet/vue-leaflet'
 import 'leaflet/dist/leaflet.css'
+import { GridStack } from 'gridstack'
+import 'gridstack/dist/gridstack.min.css'
 
 const store = useMetricsStore()
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
 const zoom = ref(15)
+
 let grid = null
 
 onMounted(() => {
@@ -19,7 +20,17 @@ onMounted(() => {
   grid = GridStack.init({
     cellHeight: '160px',
     margin: 16,
-    minRow: 1,
+  })
+  const savedLayout = localStorage.getItem('netzona-layout')
+  if (savedLayout) {
+    const layoutData = JSON.parse(savedLayout)
+
+    grid.load(layoutData, false)
+  }
+
+  grid.on('change', () => {
+    const currentLayout = grid.save(false)
+    localStorage.setItem('netzona-layout', JSON.stringify(currentLayout))
   })
 })
 
@@ -102,7 +113,7 @@ onUnmounted(() => {
 
     <main class="p-6 relative z-10 max-w-7xl mx-auto">
       <div class="grid-stack">
-        <div class="grid-stack-item" gs-w="3" gs-h="1">
+        <div class="grid-stack-item" gs-w="3" gs-h="1" gs-id="card-temp">
           <div class="grid-stack-item-content glass-card group">
             <p class="label">Temperatura</p>
             <h2 class="value text-mako-800 dark:text-white">
@@ -111,7 +122,7 @@ onUnmounted(() => {
           </div>
         </div>
 
-        <div class="grid-stack-item" gs-w="3" gs-h="1">
+        <div class="grid-stack-item" gs-w="3" gs-h="1" gs-id="card-hum">
           <div class="grid-stack-item-content glass-card group">
             <p class="label">Humedad</p>
             <h2 class="value text-mako-800 dark:text-white">
@@ -120,7 +131,7 @@ onUnmounted(() => {
           </div>
         </div>
 
-        <div class="grid-stack-item" gs-w="3" gs-h="1">
+        <div class="grid-stack-item" gs-w="3" gs-h="1" gs-id="card-battery">
           <div class="grid-stack-item-content glass-card group">
             <p class="label">Batería</p>
             <h2
@@ -135,7 +146,7 @@ onUnmounted(() => {
           </div>
         </div>
 
-        <div class="grid-stack-item" gs-w="3" gs-h="1">
+        <div class="grid-stack-item" gs-w="3" gs-h="1" gs-id="card-volt">
           <div class="grid-stack-item-content glass-card group">
             <p class="label">Voltaje</p>
             <h2 class="value text-mako-800 dark:text-white">
@@ -144,7 +155,7 @@ onUnmounted(() => {
           </div>
         </div>
 
-        <div class="grid-stack-item" gs-w="4" gs-h="1" gs-x="0" gs-y="1">
+        <div class="grid-stack-item" gs-w="4" gs-h="1" gs-x="0" gs-y="1" gs-id="card-power">
           <div class="grid-stack-item-content glass-card group">
             <p class="label">Consumo de Potencia</p>
             <h2 class="value text-mako-800 dark:text-white">
@@ -153,7 +164,7 @@ onUnmounted(() => {
           </div>
         </div>
 
-        <div class="grid-stack-item" gs-w="4" gs-h="2" gs-x="8" gs-y="1">
+        <div class="grid-stack-item" gs-w="4" gs-h="2" gs-x="8" gs-y="1" gs-id="card-map">
           <div class="grid-stack-item-content glass-card !p-0 overflow-hidden relative group">
             <div class="w-full h-full z-0">
               <l-map
@@ -204,7 +215,7 @@ onUnmounted(() => {
           </div>
         </div>
 
-        <div class="grid-stack-item" gs-w="8" gs-h="2" gs-x="0" gs-y="2">
+        <div class="grid-stack-item" gs-w="8" gs-h="2" gs-x="0" gs-y="2" gs-id="card-chart">
           <div class="grid-stack-item-content glass-card group items-start">
             <div class="flex justify-between w-full mb-4 items-center">
               <p class="label">Historial de Potencia</p>
