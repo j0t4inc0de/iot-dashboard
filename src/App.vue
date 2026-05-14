@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted } from 'vue'
 import { startMockService, stopMockService } from './services/mockService'
 import { useMetricsStore } from './stores/metrics'
 import { useDark, useToggle } from '@vueuse/core'
@@ -16,7 +16,7 @@ onMounted(() => {
   startMockService()
   grid = GridStack.init({
     cellHeight: '160px',
-    margin: 10,
+    margin: 16,
     minRow: 1,
   })
 })
@@ -29,44 +29,63 @@ onUnmounted(() => {
 
 <template>
   <div
-    class="min-h-screen transition-colors duration-500 bg-slate-100 dark:bg-[#0f172a] text-slate-900 dark:text-white font-sans selection:bg-indigo-500/30"
+    class="min-h-screen transition-colors duration-500 bg-mako-50 dark:bg-mako-900 text-mako-900 dark:text-white font-sans selection:bg-primary/30"
   >
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
       <div
-        class="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] rounded-full bg-indigo-500/20 blur-[120px]"
+        class="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] rounded-full bg-primary/10 dark:bg-primary/5 blur-[120px]"
       ></div>
       <div
-        class="absolute top-[20%] -right-[5%] w-[30%] h-[30%] rounded-full bg-purple-500/20 blur-[120px]"
+        class="absolute top-[30%] -right-[10%] w-[40%] h-[40%] rounded-full bg-primary/10 dark:bg-primary/5 blur-[120px]"
       ></div>
     </div>
 
     <nav
-      class="sticky top-0 z-50 px-6 py-3 border-b border-slate-200 dark:border-white/10 backdrop-blur-md bg-white/50 dark:bg-slate-900/40 flex justify-between items-center"
+      class="sticky top-0 z-50 px-6 py-4 border-b border-white/20 dark:border-white/5 backdrop-blur-xl bg-white/80 dark:bg-mako-900/60 flex justify-between items-center transition-all"
     >
       <div class="flex items-center gap-2">
-        <span class="font-bold text-xl tracking-tight"
-          >NET<span class="text-indigo-500">ZONA</span></span
+        <span class="font-bold text-2xl tracking-tight"
+          >NET<span class="text-primary">ZONA</span></span
         >
       </div>
 
       <div class="flex items-center gap-6">
         <button
+          @click="toggleSystem"
+          class="relative overflow-hidden group px-6 py-2 rounded-full bg-primary text-mako-950 font-semibold shadow-[0_0_20px_rgba(0,209,94,0.3)] hover:shadow-[0_0_25px_rgba(0,209,94,0.5)] transition-all duration-300 hover:-translate-y-0.5"
+        >
+          <span class="relative z-10">{{
+            isSystemActive ? 'Sistema Activo' : 'Activar Sistema'
+          }}</span>
+          <div
+            class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover:animate-shimmer z-0"
+          ></div>
+        </button>
+
+        <button
           @click="toggleDark()"
-          class="hover:bg-slate-200 dark:hover:bg-white/20 p-2 rounded-full transition-colors text-xl"
+          class="hover:bg-mako-200 dark:hover:bg-white/10 p-2 rounded-full transition-colors text-xl"
         >
           <span v-if="isDark">☀️</span>
           <span v-else>🌙</span>
         </button>
 
-        <div class="flex items-center gap-3 pl-4 border-l border-slate-300 dark:border-white/10">
+        <div class="flex items-center gap-3 pl-4 border-l border-mako-300 dark:border-white/10">
           <div class="text-right hidden sm:block">
-            <p class="text-sm font-semibold leading-none">Juan Erices</p>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Administrador</p>
+            <p class="text-sm font-semibold leading-none text-mako-800 dark:text-mako-100">
+              Juan Erices
+            </p>
+            <p class="text-xs text-mako-500 dark:text-mako-400 mt-1">Administrador</p>
           </div>
           <div
-            class="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center border-2 border-white/50 shadow-md"
+            class="w-10 h-10 rounded-full bg-mako-200 dark:bg-mako-800 flex items-center justify-center border border-white/50 dark:border-white/10 shadow-md overflow-hidden"
           >
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              class="w-6 h-6 text-mako-500 dark:text-mako-300"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -79,62 +98,74 @@ onUnmounted(() => {
       </div>
     </nav>
 
-    <main class="p-6 relative z-10">
+    <main class="p-6 relative z-10 max-w-7xl mx-auto">
       <div class="grid-stack">
         <div class="grid-stack-item" gs-w="3" gs-h="1">
-          <div class="grid-stack-item-content glass-card">
+          <div class="grid-stack-item-content glass-card group">
             <p class="label">Temperatura</p>
-            <h2 class="value text-orange-500">
-              {{ store.temperature }}<span class="unit">°C</span>
+            <h2 class="value text-mako-800 dark:text-white">
+              {{ store.temperature }}<span class="unit text-primary">°C</span>
             </h2>
           </div>
         </div>
 
         <div class="grid-stack-item" gs-w="3" gs-h="1">
-          <div class="grid-stack-item-content glass-card">
+          <div class="grid-stack-item-content glass-card group">
             <p class="label">Humedad</p>
-            <h2 class="value text-blue-500">{{ store.humidity }}<span class="unit">%</span></h2>
-          </div>
-        </div>
-
-        <div class="grid-stack-item" gs-w="3" gs-h="1">
-          <div class="grid-stack-item-content glass-card">
-            <p class="label">Batería</p>
-            <h2 class="value" :class="store.battery < 20 ? 'text-red-500' : 'text-emerald-500'">
-              {{ store.battery }}<span class="unit">%</span>
+            <h2 class="value text-mako-800 dark:text-white">
+              {{ store.humidity }}<span class="unit text-primary">%</span>
             </h2>
           </div>
         </div>
 
         <div class="grid-stack-item" gs-w="3" gs-h="1">
-          <div class="grid-stack-item-content glass-card">
+          <div class="grid-stack-item-content glass-card group">
+            <p class="label">Batería</p>
+            <h2
+              class="value"
+              :class="store.battery < 20 ? 'text-red-500' : 'text-mako-800 dark:text-white'"
+            >
+              {{ store.battery
+              }}<span class="unit" :class="store.battery < 20 ? 'text-red-400' : 'text-primary'"
+                >%</span
+              >
+            </h2>
+          </div>
+        </div>
+
+        <div class="grid-stack-item" gs-w="3" gs-h="1">
+          <div class="grid-stack-item-content glass-card group">
             <p class="label">Voltaje</p>
-            <h2 class="value text-yellow-500">{{ store.voltage }}<span class="unit">V</span></h2>
+            <h2 class="value text-mako-800 dark:text-white">
+              {{ store.voltage }}<span class="unit text-primary">V</span>
+            </h2>
           </div>
         </div>
 
         <div class="grid-stack-item" gs-w="4" gs-h="1" gs-x="0" gs-y="1">
-          <div class="grid-stack-item-content glass-card">
+          <div class="grid-stack-item-content glass-card group">
             <p class="label">Consumo de Potencia</p>
-            <h2 class="value text-purple-500">{{ store.power }}<span class="unit">W</span></h2>
+            <h2 class="value text-mako-800 dark:text-white">
+              {{ store.power }}<span class="unit text-primary">W</span>
+            </h2>
           </div>
         </div>
 
         <div class="grid-stack-item" gs-w="4" gs-h="2" gs-x="8" gs-y="1">
           <div class="grid-stack-item-content glass-card !p-0 overflow-hidden relative group">
             <div
-              class="absolute inset-0 bg-slate-200 dark:bg-slate-800 flex items-center justify-center opacity-50 transition-opacity group-hover:opacity-30"
+              class="absolute inset-0 bg-mako-200 dark:bg-mako-800/50 flex items-center justify-center opacity-50 transition-opacity group-hover:opacity-30"
             >
-              <span class="text-sm text-slate-500 dark:text-slate-400 font-medium"
+              <span class="text-sm text-mako-500 dark:text-mako-400 font-medium"
                 >Contenedor futuro de Leaflet Map</span
               >
             </div>
             <div
-              class="absolute bottom-0 w-full p-6 bg-gradient-to-t from-white via-white/80 to-transparent dark:from-slate-900 dark:via-slate-900/80"
+              class="absolute bottom-0 w-full p-6 bg-gradient-to-t from-white via-white/90 to-transparent dark:from-mako-900 dark:via-mako-900/90"
             >
               <p class="label flex items-center gap-1">
                 <svg
-                  class="w-4 h-4 text-indigo-500"
+                  class="w-4 h-4 text-primary"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -154,10 +185,10 @@ onUnmounted(() => {
                 </svg>
                 Ubicación
               </p>
-              <h2 class="text-lg font-medium mt-1 text-slate-800 dark:text-white">
+              <h2 class="text-lg font-medium mt-1 text-mako-800 dark:text-white">
                 {{ store.location.name }}
               </h2>
-              <p class="text-xs text-slate-500 dark:text-slate-400 font-mono mt-1">
+              <p class="text-xs text-mako-500 dark:text-mako-400 mt-1">
                 Lat: {{ store.location.lat }} | Lng: {{ store.location.lng }}
               </p>
             </div>
@@ -165,18 +196,24 @@ onUnmounted(() => {
         </div>
 
         <div class="grid-stack-item" gs-w="8" gs-h="2" gs-x="0" gs-y="2">
-          <div class="grid-stack-item-content glass-card items-start">
+          <div class="grid-stack-item-content glass-card group items-start">
             <div class="flex justify-between w-full mb-4 items-center">
               <p class="label">Historial de Potencia</p>
-              <span class="text-xs font-medium px-2 py-1 bg-green-500/10 text-green-500 rounded-md"
+              <span
+                class="text-xs font-medium px-3 py-1 bg-primary/10 text-primary rounded-full border border-primary/20 shadow-[0_0_10px_rgba(0,209,94,0.1)]"
                 >En vivo</span
               >
             </div>
             <div
-              class="w-full flex-1 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 bg-white/20 dark:bg-slate-800/20 flex items-center justify-center"
+              class="w-full flex-1 rounded-[1.5rem] border border-dashed border-mako-300 dark:border-mako-700 bg-white/40 dark:bg-mako-800/30 flex items-center justify-center transition-colors group-hover:border-primary/50"
             >
-              <p class="text-slate-400 dark:text-slate-500 flex flex-col items-center gap-2">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <p class="text-mako-400 dark:text-mako-500 flex flex-col items-center gap-2">
+                <svg
+                  class="w-8 h-8 opacity-50"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -194,38 +231,26 @@ onUnmounted(() => {
   </div>
 </template>
 
-<style>
+<style lang="postcss">
 /* Reset básico para Gridstack */
 .grid-stack-item-content {
   @apply overflow-hidden;
 }
 
-/* --- ESTILOS MODO CLARO (Por defecto) --- */
+/* --- ESTILOS GLASSMORPHISM MODERNOS --- */
 .glass-card {
-  @apply flex flex-col items-center justify-center p-6 rounded-3xl transition-all duration-300;
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
-}
-
-/* --- ESTILOS MODO OSCURO (Activados por Tailwind/VueUse) --- */
-.dark .glass-card {
-  background: rgba(15, 23, 42, 0.4); /* Slate-900 con opacidad */
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+  @apply flex flex-col items-center justify-center p-6 bg-white/80 dark:bg-mako-900/60 backdrop-blur-xl border border-white/40 dark:border-white/5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] rounded-[2rem] transition-all duration-300 hover:-translate-y-1 hover:shadow-primary/20 dark:hover:shadow-primary/10;
 }
 
 .label {
-  @apply text-xs uppercase font-bold tracking-widest text-slate-500 dark:text-slate-400;
+  @apply text-xs uppercase font-bold tracking-widest text-mako-500 dark:text-mako-400 transition-colors group-hover:text-mako-700 dark:group-hover:text-mako-300;
 }
 
 .value {
-  @apply text-5xl font-light tracking-tighter mt-1;
+  @apply text-5xl font-semibold tracking-tighter mt-1 drop-shadow-sm;
 }
 
 .unit {
-  @apply text-lg ml-1 font-normal opacity-50;
+  @apply text-lg ml-1 font-medium opacity-80;
 }
 </style>
