@@ -7,7 +7,7 @@ export const useMetricsStore = defineStore('metrics', () => {
   const voltage = ref(220)
   const power = ref(1500)
   const battery = ref(85)
-  const location = ref({ lat: -33.4489, lng: -70.6693, name: 'Santiago, CL' })
+  const location = ref({ lat: -33.0245, lng: -71.5518, name: '703 Arlegui, Viña del Mar' })
 
   const updateMetrics = (newData) => {
     if (newData.temperature !== undefined) temperature.value = newData.temperature
