@@ -66,10 +66,63 @@ onUnmounted(() => {
 
         <button
           @click="toggleDark()"
-          class="hover:bg-mako-200 dark:hover:bg-white/10 p-2 rounded-full transition-colors text-xl"
+          class="hover:bg-mako-200 dark:hover:bg-white/10 p-2 rounded-full transition-colors flex items-center justify-center text-mako-800 dark:text-mako-200"
         >
-          <span v-if="isDark">☀️</span>
-          <span v-else>🌙</span>
+          <svg
+            v-if="isDark"
+            class="w-6 h-6"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_iconCarrier">
+              <path d="M7 3V0H9V3H7Z" fill="currentColor"></path>
+              <path d="M9 13V16H7V13H9Z" fill="currentColor"></path>
+              <path
+                d="M11 8C11 9.65685 9.65685 11 8 11C6.34315 11 5 9.65685 5 8C5 6.34315 6.34315 5 8 5C9.65685 5 11 6.34315 11 8Z"
+                fill="currentColor"
+              ></path>
+              <path d="M0 9H3V7H0V9Z" fill="currentColor"></path>
+              <path d="M16 7H13V9H16V7Z" fill="currentColor"></path>
+              <path
+                d="M3.75735 5.17157L1.63603 3.05025L3.05025 1.63603L5.17157 3.75735L3.75735 5.17157Z"
+                fill="currentColor"
+              ></path>
+              <path
+                d="M12.2426 10.8284L14.364 12.9497L12.9497 14.364L10.8284 12.2426L12.2426 10.8284Z"
+                fill="currentColor"
+              ></path>
+              <path
+                d="M3.05025 14.364L5.17157 12.2426L3.75735 10.8284L1.63603 12.9498L3.05025 14.364Z"
+                fill="currentColor"
+              ></path>
+              <path
+                d="M12.9497 1.63604L10.8284 3.75736L12.2426 5.17158L14.364 3.05026L12.9497 1.63604Z"
+                fill="currentColor"
+              ></path>
+            </g>
+          </svg>
+
+          <svg
+            v-else
+            class="w-6 h-6"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_iconCarrier">
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M8.23129 2.24048C9.24338 1.78695 10.1202 2.81145 9.80357 3.70098C8.72924 6.71928 9.38932 10.1474 11.6193 12.3765C13.8606 14.617 17.3114 15.2755 20.3395 14.1819C21.2206 13.8637 22.2173 14.7319 21.7817 15.7199C21.7688 15.7491 21.7558 15.7782 21.7427 15.8074C20.9674 17.5266 19.7272 19.1434 18.1227 20.2274C16.4125 21.3828 14.3957 22.0001 12.3316 22.0001H12.3306C9.93035 21.9975 7.6057 21.1603 5.75517 19.6321C3.90463 18.1039 2.64345 15.9797 2.18793 13.6237C1.73241 11.2677 2.11094 8.82672 3.2586 6.71917C4.34658 4.72121 6.17608 3.16858 8.20153 2.25386L8.23129 2.24048Z"
+                fill="currentColor"
+              ></path>
+            </g>
+          </svg>
         </button>
 
         <div class="flex items-center gap-3 pl-4 border-l border-mako-300 dark:border-white/10">
