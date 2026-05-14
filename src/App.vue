@@ -127,24 +127,6 @@ onUnmounted(() => {
           </div>
         </div>
 
-        <div class="grid-stack-item" gs-w="4" gs-h="1" gs-x="4" gs-y="1">
-          <div class="grid-stack-item-content glass-card justify-center">
-            <p class="label mb-3">Control Principal</p>
-            <button
-              @click="toggleSystem"
-              class="w-full max-w-[200px] py-3 rounded-2xl font-bold tracking-wide transition-all duration-300 transform active:scale-95 shadow-lg flex items-center justify-center gap-2"
-              :class="
-                isSystemActive
-                  ? 'bg-red-500 hover:bg-red-600 text-white shadow-red-500/30'
-                  : 'bg-indigo-500 hover:bg-indigo-600 text-white shadow-indigo-500/30'
-              "
-            >
-              <div class="w-3 h-3 rounded-full bg-white animate-pulse" v-if="isSystemActive"></div>
-              {{ isSystemActive ? 'DETENER SISTEMA' : 'INICIAR SISTEMA' }}
-            </button>
-          </div>
-        </div>
-
         <div class="grid-stack-item" gs-w="4" gs-h="2" gs-x="8" gs-y="1">
           <div class="grid-stack-item-content glass-card !p-0 overflow-hidden relative group">
             <div
