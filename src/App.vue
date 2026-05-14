@@ -55,7 +55,7 @@ onUnmounted(() => {
           class="relative overflow-hidden group px-6 py-2 rounded-full bg-primary text-mako-950 font-semibold shadow-[0_0_20px_rgba(0,209,94,0.3)] hover:shadow-[0_0_25px_rgba(0,209,94,0.5)] transition-all duration-300 hover:-translate-y-0.5"
         >
           <span class="relative z-10">{{
-            isSystemActive ? 'Sistema Activo' : 'Activar Sistema'
+            isSystemActive ? 'Sistema Activo' : 'Encender Sistema'
           }}</span>
           <div
             class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover:animate-shimmer z-0"
