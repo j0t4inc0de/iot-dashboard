@@ -8,18 +8,13 @@ import 'gridstack/dist/gridstack.min.css'
 import { LMap, LTileLayer, LMarker } from '@vue-leaflet/vue-leaflet'
 import 'leaflet/dist/leaflet.css'
 
-import { createChart } from 'lightweight-charts'
+import ChartWidget from './components/widgets/ChartWidget.vue'
 
 const store = useMetricsStore()
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
 const zoom = ref(15)
 let grid = null
-
-const chartContainer = ref(null)
-let chart = null
-let resizeObserver = null
-let simulationInterval = null
 
 onMounted(() => {
   startMockService()
@@ -29,73 +24,10 @@ onMounted(() => {
     margin: 16,
     minRow: 1,
   })
-
-  setTimeout(() => {
-    if (!chartContainer.value) return
-
-    chart = createChart(chartContainer.value, {
-      width: chartContainer.value.clientWidth,
-      height: chartContainer.value.clientHeight,
-      layout: {
-        background: { type: 'solid', color: 'transparent' },
-        textColor: '#9ca3af',
-        attributionLogo: false,
-      },
-      grid: {
-        vertLines: { color: 'rgba(156, 163, 175, 0.1)' },
-        horzLines: { color: 'rgba(156, 163, 175, 0.1)' },
-      },
-      timeScale: {
-        timeVisible: true,
-        secondsVisible: false,
-      },
-      rightPriceScale: {
-        borderVisible: false,
-      },
-    })
-
-    const areaSeries = chart.addAreaSeries({
-      lineColor: '#00D15E',
-      topColor: 'rgba(0, 209, 94, 0.4)',
-      bottomColor: 'rgba(0, 209, 94, 0.0)',
-      lineWidth: 2,
-    })
-
-    const data = []
-    let currentTime = Math.floor(Date.now() / 1000) - 3600
-    let lastValue = 220
-
-    for (let i = 0; i < 60; i++) {
-      lastValue = lastValue + (Math.random() - 0.5) * 10
-      data.push({ time: currentTime, value: lastValue })
-      currentTime += 60
-    }
-
-    areaSeries.setData(data)
-    chart.timeScale().fitContent()
-
-    resizeObserver = new ResizeObserver((entries) => {
-      if (entries.length === 0 || entries[0].target !== chartContainer.value) return
-      const newRect = entries[0].contentRect
-      chart.applyOptions({ width: newRect.width, height: newRect.height })
-    })
-    resizeObserver.observe(chartContainer.value)
-
-    simulationInterval = setInterval(() => {
-      currentTime += 60
-      lastValue = lastValue + (Math.random() - 0.5) * 10
-      areaSeries.update({ time: currentTime, value: lastValue })
-    }, 2000)
-  }, 100)
 })
-
 onUnmounted(() => {
   stopMockService()
   if (grid) grid.destroy(false)
-
-  if (simulationInterval) clearInterval(simulationInterval)
-  if (resizeObserver) resizeObserver.disconnect()
-  if (chart) chart.remove()
 })
 </script>
 
@@ -297,18 +229,7 @@ onUnmounted(() => {
 
         <div class="grid-stack-item" gs-w="8" gs-h="2" gs-x="0" gs-y="2">
           <div class="grid-stack-item-content glass-card group items-start">
-            <div class="flex justify-between w-full mb-4 items-center">
-              <p class="label">Historial de Potencia</p>
-              <span
-                class="text-xs font-medium px-3 py-1 bg-primary/10 text-primary rounded-full border border-primary/20 shadow-[0_0_10px_rgba(0,209,94,0.1)]"
-                >En vivo</span
-              >
-            </div>
-
-            <div
-              ref="chartContainer"
-              class="w-full flex-1 rounded-[1rem] border border-mako-300 dark:border-mako-700 bg-white/40 dark:bg-mako-800/30 transition-colors group-hover:border-primary/50 overflow-hidden relative"
-            ></div>
+            <ChartWidget />
           </div>
         </div>
       </div>
