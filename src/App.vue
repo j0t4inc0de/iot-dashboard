@@ -12,7 +12,19 @@ import ChartWidget from './components/widgets/ChartWidget.vue'
 
 const store = useMetricsStore()
 const isDark = useDark()
-const toggleDark = useToggle(isDark)
+const toggleDarkBase = useToggle(isDark)
+
+const toggleDark = () => {
+  if (!document.startViewTransition) {
+    toggleDarkBase()
+    return
+  }
+
+  document.startViewTransition(() => {
+    toggleDarkBase()
+  })
+}
+
 const zoom = ref(15)
 let grid = null
 
@@ -25,6 +37,7 @@ onMounted(() => {
     minRow: 1,
   })
 })
+
 onUnmounted(() => {
   stopMockService()
   if (grid) grid.destroy(false)
@@ -33,7 +46,7 @@ onUnmounted(() => {
 
 <template>
   <div
-    class="min-h-screen transition-colors duration-500 bg-mako-50 dark:bg-mako-900 text-mako-900 dark:text-white font-sans selection:bg-primary/30"
+    class="min-h-screen bg-mako-50 dark:bg-mako-900 text-mako-900 dark:text-white font-sans selection:bg-primary/30 transition-colors duration-300"
   >
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
       <div
@@ -45,7 +58,7 @@ onUnmounted(() => {
     </div>
 
     <nav
-      class="sticky top-0 z-50 px-6 py-4 border-b border-white/20 dark:border-white/5 backdrop-blur-xl bg-white/80 dark:bg-mako-900/60 flex justify-between items-center transition-all"
+      class="sticky top-0 z-50 px-6 py-4 border-b border-white/20 dark:border-white/5 backdrop-blur-xl bg-white/80 dark:bg-mako-900/60 flex justify-between items-center transition-colors duration-300"
     >
       <div class="flex items-center gap-2">
         <span class="font-bold text-2xl tracking-tight"
@@ -65,9 +78,14 @@ onUnmounted(() => {
 
         <button
           @click="toggleDark()"
-          class="hover:bg-mako-200 dark:hover:bg-white/10 p-2 rounded-full transition-colors flex items-center justify-center text-mako-800 dark:text-mako-200"
+          class="theme-toggle hover:bg-mako-200 dark:hover:bg-white/10 p-2 rounded-full transition-colors flex items-center justify-center text-mako-800 dark:text-mako-200"
         >
-          <svg v-if="isDark" class="w-6 h-6" viewBox="0 0 16 16" fill="currentColor">
+          <svg
+            v-if="isDark"
+            class="w-6 h-6 theme-toggle__icon"
+            viewBox="0 0 16 16"
+            fill="currentColor"
+          >
             <path d="M7 3V0H9V3H7Z" />
             <path d="M9 13V16H7V13H9Z" />
             <path
@@ -88,7 +106,8 @@ onUnmounted(() => {
               d="M12.9497 1.63604L10.8284 3.75736L12.2426 5.17158L14.364 3.05026L12.9497 1.63604Z"
             />
           </svg>
-          <svg v-else class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+
+          <svg v-else class="w-6 h-6 theme-toggle__icon" viewBox="0 0 24 24" fill="currentColor">
             <path
               fill-rule="evenodd"
               clip-rule="evenodd"
@@ -243,7 +262,7 @@ onUnmounted(() => {
   @apply overflow-hidden;
 }
 .glass-card {
-  @apply flex flex-col items-center justify-center p-6 bg-white/80 dark:bg-mako-900/60 backdrop-blur-xl border border-white/40 dark:border-white/5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] rounded-[2rem] transition-all duration-300 hover:-translate-y-1 hover:shadow-primary/20 dark:hover:shadow-primary/10;
+  @apply flex flex-col items-center justify-center p-6 bg-white/80 dark:bg-mako-900/60 backdrop-blur-xl border border-white/40 dark:border-white/5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] rounded-[2rem] transition-colors duration-300 hover:-translate-y-1 hover:shadow-primary/20 dark:hover:shadow-primary/10;
 }
 .label {
   @apply text-xs uppercase font-bold tracking-widest text-mako-500 dark:text-mako-400 transition-colors group-hover:text-mako-700 dark:group-hover:text-mako-300;
@@ -264,5 +283,38 @@ onUnmounted(() => {
 .leaflet-container {
   z-index: 1 !important;
   background: transparent !important;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 450ms;
+  animation-timing-function: ease-in-out;
+}
+
+::view-transition-old(root) {
+  animation-name: fade-out;
+}
+
+::view-transition-new(root) {
+  animation-name: fade-in;
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 </style>
