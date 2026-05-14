@@ -10,14 +10,7 @@ const store = useMetricsStore()
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
 
-const isSystemActive = ref(false)
-
 let grid = null
-
-const toggleSystem = () => {
-  isSystemActive.value = !isSystemActive.value
-  console.log('Estado del sistema:', isSystemActive.value ? 'Activado' : 'Desactivado')
-}
 
 onMounted(() => {
   startMockService()
